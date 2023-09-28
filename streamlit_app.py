@@ -35,7 +35,6 @@ with tab1:
         max_zoom=6,
         min_zoom=4,
     )
-
     st.write(m)
 
 with tab2:
@@ -53,3 +52,15 @@ with col2:
         2015,
         1,
     )
+
+# add a horizontal line
+st.markdown("---")
+
+# add two more tabs
+tab3, tab4 = st.tabs(["Airport Importance", "Route Importance"])
+
+with tab3:
+    st.write("Airport Importance")
+
+with tab4:
+    st.write("Route Importance")

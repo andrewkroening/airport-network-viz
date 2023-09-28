@@ -1,6 +1,7 @@
 # imports and set-up
 import streamlit as st
-import pandas as pd
+
+# import pandas as pd
 import folium
 
 # page config
@@ -34,7 +35,6 @@ with tab1:
         max_zoom=6,
         min_zoom=4,
     )
-    folium.TileLayer("cartodbpositron").add_to(m)
 
     st.write(m)
 

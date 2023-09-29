@@ -3,9 +3,9 @@ install:
 		pip install -r requirements.txt
 
 lint:
-	pylint --disable=R,C,pointless-statement,undefined-variable --extension-pkg-whitelist='pydantic' streamlit_app.py
+	pylint --disable=R,C,pointless-statement,undefined-variable,unused-variable,no-member --extension-pkg-whitelist='pydantic' *.py
 
 format:
-	black streamlit_app.py
+	black *.py
 
 all: install lint format

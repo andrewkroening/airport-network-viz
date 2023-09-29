@@ -265,7 +265,7 @@ def unnormalize(x):
     """
 
     # make an colormap for the nodes
-    plot_cmap = plt.cm.Spectral
+    plot_cmap = plt.cm.Reds
 
     # define ranges
     OldMin = 0

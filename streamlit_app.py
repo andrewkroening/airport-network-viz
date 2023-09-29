@@ -15,7 +15,7 @@ st.set_page_config(
 # Title
 st.title("US Air Travel Relies Very Heavily on Atlanta")
 st.subheader(
-    "This Map Depicts Atlanta's Importance to Domestic Travellers Relative to Other Airports."
+    "Atlanta's importance to US Domestic Air Travel steadily rose from 1990 to 2015. It has more than double the criticality of the next most important airport, Dallas-Fort Worth."
 )
 st.caption("Please be patient, it's doing a lot of math behind the scenes.")
 
@@ -102,11 +102,11 @@ with col5:
 st.markdown(
     """
     ## Instructions
-    * This map shows the network of airports in the US in the year you select on the slider above the visual.
-    * The size and color of the airport nodes are proportional to the betweenness centrality of the airport.
+    * This looks like a map, but it's actually a mathematical depiction of a network; called a graph. It shows the network of airports in the US in the year you select on the slider above the visual.
     * The edges, or lines, are the flights between the airports.
+    * The size and color of the airport nodes are proportional to the betweenness centrality of the airport.
     * Betweeness centrality is a measure of how important a node is in a network. In this case, it is a measure of the number of shortest routes that travel through that location.
-    * The lighter and larger the node, the more important it is to the network.
+    * Therefore, larger the node, the more important it is to the network.
     * Move the slider to generate a new graph for the year you select.
     """
 )

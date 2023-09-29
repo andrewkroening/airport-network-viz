@@ -63,9 +63,9 @@ with col5:
                 [edge[1]["source_lat"], edge[1]["source_long"]],
                 [edge[1]["target_lat"], edge[1]["target_long"]],
             ],
-            color="firebrick",
+            color="darkgray",
             weight=0.3,
-            opacity=0.2,
+            opacity=0.3,
         ).add_to(m)
 
     # add the nodes to the map using the order from the nodes list
@@ -89,7 +89,7 @@ with col5:
             folium.CircleMarker(
                 location=[lat, lon],
                 radius=size,
-                color=color,
+                color="black",
                 fill=True,
                 fill_color=color,
                 fill_opacity=1,

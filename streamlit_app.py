@@ -17,6 +17,7 @@ st.title("US Air Travel Relies Very Heavily on Atlanta")
 st.subheader(
     "This Map Depicts Atlanta's Importance to Domestic Travellers Relative to Other Airports."
 )
+st.caption("Please be patient, it's doing a lot of math behind the scenes.")
 
 # year
 year = 2015

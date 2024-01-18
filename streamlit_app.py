@@ -13,9 +13,9 @@ st.set_page_config(
 )
 
 # Title
-st.title("US Air Travel Relies Very Heavily on Atlanta")
+st.title("US Air Travel Network Visualization Tool")
 st.subheader(
-    "Atlanta's importance to US Domestic Air Travel steadily rose from 1990 to 2015. It has more than double the criticality of the next most important airport, Dallas-Fort Worth."
+    "Interact with the visualization below to learn more about how the US air travel network has changed over time, and what happens when an airport is closed."
 )
 st.caption("Please be patient, it's doing a lot of math behind the scenes.")
 
@@ -93,7 +93,7 @@ with col5:
                 fill=True,
                 fill_color=color,
                 fill_opacity=1,
-                tooltip=f'AIRPORT: {node_attr["city"]}<br>CRITICALITY: {node_attr["betweenness_centrality"]:.2f}',
+                tooltip=f'AIRPORT: {node_attr["city"]}<br>CENTRALITY: {node_attr["betweenness_centrality"]:.2f}',
             ).add_to(m)
 
     # show the map
@@ -102,11 +102,10 @@ with col5:
 st.markdown(
     """
     ## Instructions
-    * This looks like a map, but it's actually a mathematical depiction of a network; called a graph. It shows the network of airports in the US in the year you select on the slider above the visual.
-    * The edges, or lines, are the flights between the airports.
-    * The size and color of the airport nodes are proportional to the betweenness centrality of the airport.
-    * Betweeness centrality is a measure of how important a node is in a network. In this case, it is a measure of the number of shortest routes that travel through that location.
-    * Therefore, larger the node, the more important it is to the network.
-    * Move the slider to generate a new graph for the year you select.
+    * The map visualizes U.S. airport networks through a graph, with a selectable year via a slider.
+    * It displays flights as edges (lines) connecting airport nodes.
+    * Airport nodes' size and color indicate their betweenness centrality, reflecting importance in the network.
+    * Betweenness centrality represents the count of shortest routes passing through an airport.
+    * Adjusting the slider updates the graph to the chosen year.
     """
 )

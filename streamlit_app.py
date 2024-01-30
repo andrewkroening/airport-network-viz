@@ -3,7 +3,7 @@ import streamlit as st
 import folium
 import pandas as pd
 
-from data_actions import main_runner, prep_plot_objs, unnormalize, get_size
+from data_actions import main_runner, prep_plot_objs, unnormalize, get_size, get_top_10
 
 # page config
 st.set_page_config(
@@ -38,6 +38,8 @@ with col2:
 
     pass_data = main_runner(year)
     passenger_df_trim, nodes_list = prep_plot_objs(pass_data)
+    pass_data_top10_air, pass_data_top10_pass = get_top_10(pass_data)
+
 
 col4, col5, col6 = st.columns([1, 8, 1])
 
@@ -131,67 +133,64 @@ tab3, tab4 = st.tabs(["Most Important Airports", "Most Important Routes"])
 
 # most important airports
 with tab3:
-    # get the top 10 airports
-    pass_data_top10_air = pass_data.nodes(data=True)
-    pass_data_top10_air = sorted(
-        pass_data_top10_air, key=lambda x: x[1]["betweenness_centrality"], reverse=True
-    )[:10]
+    # display the data as a row of text for each airport
+    col7, col8, col9, col10, col11 = st.columns([1, 1, 1, 1, 1])
+    with col7:
+        st.write("Airport Code")
+    with col8:
+        st.write("Airport Name")
+    with col9:
+        st.write("Original Centrality")
+    with col10:
+        st.write("Current Centrality")
+    with col11:
+        st.write("Remove")
 
-    # create a dataframe
-    pass_data_top10_air = pd.DataFrame(pass_data_top10_air)
-
-    # extract the attributes into columns
-    pass_data_top10_air["city"] = pass_data_top10_air[1].apply(lambda x: x["city"])
-    pass_data_top10_air["betweenness_centrality"] = (
-        pass_data_top10_air[1].apply(lambda x: x["betweenness_centrality"]).round(2)
-    )
-
-    # drop the attributes column
-    pass_data_top10_air = pass_data_top10_air.drop(columns=[1])
-
-    # rename the columns
-    pass_data_top10_air = pass_data_top10_air.rename(
-        columns={
-            0: "Airport",
-            "betweenness_centrality": "Centrality",
-            "city": "Airport Name",
-        }
-    )
-
-    # display the dataframe
-    st.dataframe(pass_data_top10_air)
+    # display the data as a row of text for each airport
+    for airport in pass_data_top10_air.iterrows():
+        airport = airport[1]
+        col7, col8, col9, col10, col11 = st.columns([1, 1, 1, 1, 1])
+        with col7:
+            st.write(airport["Airport"])
+        with col8:
+            st.write(airport["Airport Name"])
+        with col9:
+            st.write(airport["Centrality"])
+        with col10:
+            st.write(airport["Centrality"])
+        with col11:
+            trash_airport = st.button(f"Remove {airport['Airport']}")
+        st.divider()
 
 # most important routes
 with tab4:
-    # get the top 10 routes
-    pass_data_top10_pass = pass_data.edges(data=True)
-    pass_data_top10_pass = sorted(
-        pass_data_top10_pass,
-        key=lambda x: x[2]["edge_betweenness_centrality"],
-        reverse=True,
-    )[:10]
+    # display the data as a row of text for each route
+    col12, col13, col14, col15, col16 = st.columns([1, 1, 1, 1, 1])
+    with col12:
+        st.write("Origin Airport")
+    with col13:
+        st.write("Destination Airport")
+    with col14:
+        st.write("Original Link Centrality")
+    with col15:
+        st.write("Current Link Centrality")
+    with col16:
+        st.write("Remove")
 
-    # create a dataframe
-    pass_data_top10_pass = pd.DataFrame(pass_data_top10_pass)
-
-    # extract the attributes into columns
-    pass_data_top10_pass["edge_betweenness_centrality"] = (
-        pass_data_top10_pass[2]
-        .apply(lambda x: x["edge_betweenness_centrality"])
-        .round(4)
-    )
-
-    # drop the attributes column
-    pass_data_top10_pass = pass_data_top10_pass.drop(columns=[2])
-
-    # rename the columns
-    pass_data_top10_pass = pass_data_top10_pass.rename(
-        columns={
-            0: "Origin Airport",
-            1: "Desination Airport",
-            "edge_betweenness_centrality": "Link Centrality",
-        }
-    )
-
-    # show the dataframe
-    st.dataframe(pass_data_top10_pass)
+    # display the data as a row of text for each route
+    for route in pass_data_top10_pass.iterrows():
+        route = route[1]
+        col12, col13, col14, col15, col16 = st.columns([1, 1, 1, 1, 1])
+        with col12:
+            st.write(route["Origin Airport"])
+        with col13:
+            st.write(route["Desination Airport"])
+        with col14:
+            st.write(route["Link Centrality"])
+        with col15:
+            st.write(route["Link Centrality"])
+        with col16:
+            trash_route = st.button(
+                f"Remove {route['Origin Airport']} to {route['Desination Airport']}"
+            )
+        st.divider()

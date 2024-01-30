@@ -344,3 +344,64 @@ def prep_plot_objs(pass_data):
     passenger_df_trim = pass_data.sort_values(by="weight", ascending=False).head(2500)
 
     return passenger_df_trim, nodes_list
+
+
+def get_top_10(passenger_graph):
+    # get the top 10 airports
+    pass_data_top10_air = passenger_graph.nodes(data=True)
+    pass_data_top10_air = sorted(
+        pass_data_top10_air, key=lambda x: x[1]["betweenness_centrality"], reverse=True
+    )[:10]
+
+    # create a dataframe
+    pass_data_top10_air = pd.DataFrame(pass_data_top10_air)
+
+    # extract the attributes into columns
+    pass_data_top10_air["city"] = pass_data_top10_air[1].apply(lambda x: x["city"])
+    pass_data_top10_air["betweenness_centrality"] = (
+        pass_data_top10_air[1].apply(lambda x: x["betweenness_centrality"]).round(2)
+    )
+
+    # drop the attributes column
+    pass_data_top10_air = pass_data_top10_air.drop(columns=[1])
+
+    # rename the columns
+    pass_data_top10_air = pass_data_top10_air.rename(
+        columns={
+            0: "Airport",
+            "betweenness_centrality": "Centrality",
+            "city": "Airport Name",
+        }
+    )
+
+    # get the top 10 routes
+    pass_data_top10_pass = passenger_graph.edges(data=True)
+    pass_data_top10_pass = sorted(
+        pass_data_top10_pass,
+        key=lambda x: x[2]["edge_betweenness_centrality"],
+        reverse=True,
+    )[:10]
+
+    # create a dataframe
+    pass_data_top10_pass = pd.DataFrame(pass_data_top10_pass)
+
+    # extract the attributes into columns
+    pass_data_top10_pass["edge_betweenness_centrality"] = (
+        pass_data_top10_pass[2]
+        .apply(lambda x: x["edge_betweenness_centrality"])
+        .round(4)
+    )
+
+    # drop the attributes column
+    pass_data_top10_pass = pass_data_top10_pass.drop(columns=[2])
+
+    # rename the columns
+    pass_data_top10_pass = pass_data_top10_pass.rename(
+        columns={
+            0: "Origin Airport",
+            1: "Desination Airport",
+            "edge_betweenness_centrality": "Link Centrality",
+        }
+    )
+
+    return pass_data_top10_air, pass_data_top10_pass

@@ -405,3 +405,34 @@ def get_top_10(passenger_graph):
     )
 
     return pass_data_top10_air, pass_data_top10_pass
+
+
+def remove_airport(airport, graph):
+    """Function to remove an airport from the graph
+
+    Args:
+        airport: str
+
+    Returns:
+        None
+    """
+
+    # remove the node
+    graph.remove_node(airport)
+
+
+def remove_route(origin, destination, graph):
+    """Function to remove a route from the graph
+
+    Args:
+        origin: str
+        destination: str
+
+    Returns:
+        graph: DiGraph
+    """
+
+    # remove the edge
+    graph.remove_edge(origin, destination)
+
+    return graph

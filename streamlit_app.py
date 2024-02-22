@@ -3,7 +3,15 @@ import streamlit as st
 import folium
 import pandas as pd
 
-from data_actions import main_runner, prep_plot_objs, unnormalize, get_size, get_top_10
+from data_actions import (
+    main_runner,
+    prep_plot_objs,
+    unnormalize,
+    get_size,
+    get_top_10,
+    remove_airport,
+    remove_route,
+)
 
 # page config
 st.set_page_config(
@@ -36,7 +44,10 @@ with col2:
         1,
     )
 
-    pass_data = main_runner(year)
+    pass_data_orig = main_runner(year)
+    passenger_df_trim_orig, nodes_list_orig = prep_plot_objs(pass_data_orig)
+    pass_data_top10_air_orig, pass_data_top10_pass_orig = get_top_10(pass_data_orig)
+    pass_data = pass_data_orig.copy()
     passenger_df_trim, nodes_list = prep_plot_objs(pass_data)
     pass_data_top10_air, pass_data_top10_pass = get_top_10(pass_data)
 
@@ -45,7 +56,9 @@ col4, col5, col6 = st.columns([1, 8, 1])
 
 with col5:
     # add tabs
-    tab1, tab2 = st.tabs(["Map", "Instructions"])
+    tab1, tab2, tab3, tab4 = st.tabs(
+        ["Map", "Instructions", "Most Important Airports", "Most Important Routes"]
+    )
 
     # add map to tab1
     with tab1:
@@ -125,72 +138,61 @@ st.write("")
 st.write("")
 
 st.caption(
-    "Use the tables below to view and compare the most important airports and routes. Furture functionality will allow you to try removing an airport or route to see what happens to the network."
+    "Use the tables below to view and compare the most important airports and routes."
 )
 
-# make two tabs for the most important airports and the most important routes
 tab3, tab4 = st.tabs(["Most Important Airports", "Most Important Routes"])
 
 # most important airports
 with tab3:
     # display the data as a row of text for each airport
-    col7, col8, col9, col10, col11 = st.columns([1, 1, 1, 1, 1])
+    col7, col8, col9 = st.columns([1, 1, 1])
     with col7:
         st.write("Airport Code")
     with col8:
         st.write("Airport Name")
     with col9:
-        st.write("Original Centrality")
-    with col10:
-        st.write("Current Centrality")
-    with col11:
-        st.write("Remove")
+        st.write("Centrality")
 
     # display the data as a row of text for each airport
-    for airport in pass_data_top10_air.iterrows():
+    for airport in pass_data_top10_air_orig.iterrows():
         airport = airport[1]
-        col7, col8, col9, col10, col11 = st.columns([1, 1, 1, 1, 1])
+        (
+            col7,
+            col8,
+            col9,
+        ) = st.columns([1, 1, 1])
         with col7:
             st.write(airport["Airport"])
         with col8:
             st.write(airport["Airport Name"])
         with col9:
             st.write(airport["Centrality"])
-        with col10:
-            st.write(airport["Centrality"])
-        with col11:
-            trash_airport = st.button(f"Remove {airport['Airport']}")
         st.divider()
 
 # most important routes
 with tab4:
     # display the data as a row of text for each route
-    col12, col13, col14, col15, col16 = st.columns([1, 1, 1, 1, 1])
+    col12, col13, col14 = st.columns([1, 1, 1])
     with col12:
         st.write("Origin Airport")
     with col13:
         st.write("Destination Airport")
     with col14:
-        st.write("Original Link Centrality")
-    with col15:
-        st.write("Current Link Centrality")
-    with col16:
-        st.write("Remove")
+        st.write("Route Centrality")
 
     # display the data as a row of text for each route
-    for route in pass_data_top10_pass.iterrows():
+    for route in pass_data_top10_pass_orig.iterrows():
         route = route[1]
-        col12, col13, col14, col15, col16 = st.columns([1, 1, 1, 1, 1])
+        (
+            col12,
+            col13,
+            col14,
+        ) = st.columns([1, 1, 1])
         with col12:
             st.write(route["Origin Airport"])
         with col13:
             st.write(route["Desination Airport"])
         with col14:
             st.write(route["Link Centrality"])
-        with col15:
-            st.write(route["Link Centrality"])
-        with col16:
-            trash_route = st.button(
-                f"Remove {route['Origin Airport']} to {route['Desination Airport']}"
-            )
         st.divider()
